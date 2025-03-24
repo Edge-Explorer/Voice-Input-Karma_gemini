@@ -1,2 +1,4 @@
 # Voice-Input-Karma_gemini
-Karma Ai where u can ask any query related to Garud Puran 
+Karma AI is an interactive AI tool designed to answer your queries related to the ancient Indian scripture, Garud Puran. With its voice-input capabilities, you can ask questions naturally and receive insightful responses in real time.
+
+
