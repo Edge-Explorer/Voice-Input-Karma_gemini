@@ -1,6 +1,20 @@
 # 🕉️ Karma AI: The Perfected Garud Puran Guide
 
-This project is a high-performance, spiritually-focused AI application using **Gemini 2.0 Flash**, **PostgreSQL**, and **Streamlit**.
+A professional, high-performance spiritual AI assistant powered by **Gemini 2.0 Flash**, **PostgreSQL**, and **Streamlit**. Karma AI analyzes your deeds based on the ancient wisdom of the Garud Puran, offering guidance on Karma, Swarg (Heaven), and Nark (Hell).
+
+---
+
+## ✨ Features
+
+- **🚀 Gemini 2.0 Flash**: Ultra-fast, intelligent spiritual insights.
+- **📚 Agentic RAG**: Uses ChromaDB to ensure every answer is grounded in high-quality Garud Puran datasets.
+- **🎙️ Voice-First Interaction**: 
+  - **Voice Input**: Speak your questions naturally.
+  - **Voice Output**: Listen to AI-generated spiritual summaries.
+- **🏛️ Persistent Memory**: Every interaction is stored in **PostgreSQL** for your personal spiritual history.
+- **💎 Premium UI**: A sleek, dark-themed Streamlit interface designed for focus and peace.
+
+---
 
 ## 📁 Project Structure
 
@@ -9,54 +23,64 @@ Voice-Input-Karma_gemini/
 ├── backend/                # FastAPI Logic & AI Core
 │   ├── main.py             # Entry point (API)
 │   ├── core/
-│   │   ├── agent.py        # Gemini 2.0 Agent Logic
-│   │   └── ingest.py       # ChromaDB Ingestion Service
+│   │   ├── agent.py        # Gemini 2.0 SDK (+ google-genai)
+│   │   └── ingest.py       # Knowledge Base Ingestion
 │   ├── models/
 │   │   └── interaction.py  # SQLAlchemy PostgreSQL Models
-│   ├── alembic/            # Database Migrations
-│   └── legacy/             # Original files from initial setup
+│   └── alembic/            # Database Migrations
 ├── frontend/
-│   └── app.py              # Streamlit Premium Interface
+│   └── app.py              # Streamlit Premium Interface (Voice STT/TTS)
 ├── data/
-│   ├── chroma_db/          # Vector Storage (Search Engine)
-│   └── Content_Storage_df.csv # Your Garud Puran Dataset
-└── .env                    # System Configuration
+│   ├── chroma_db/          # Vector Search Index (Ignored by Git)
+│   └── Content_Storage_df.csv # Garud Puran Knowledge Base
+├── requirements.txt        # Project Dependencies
+└── .env                    # System Config (Ignored by Git)
 ```
 
-## 🚀 Setup Instructions
+---
 
-### 1. Environment
-Ensure your `.env` is configured with your **Gemini API Key** and **PostgreSQL Credentials**.
+## 🛠️ Setup Instructions
 
-### 2. Database Migration (Alembic)
-To set up your PostgreSQL tables:
+### 1. Environment Configuration
+Create a `.env` file in the root directory (refer to `.env.example`):
+```text
+GEMINI_API_KEY=your_key_here
+DATABASE_URL=postgresql://user:password@localhost:5432/Karam-gemini
+```
+
+### 2. Database Setup (Alembic)
+Initialize your PostgreSQL tables:
 ```bash
 cd backend
 alembic upgrade head
 ```
 
-### 3. Knowledge Ingestion (ChromaDB)
-To load your CSV data into the AI's search engine:
+### 3. Knowledge Ingestion
+Load the Garud Puran dataset into the AI search engine:
 ```bash
-cd backend
-python core/ingest.py
+python backend/core/ingest.py
 ```
 
-### 4. Running the App
-**Start the Backend:**
+### 4. Run the Application
+**Start Backend:**
 ```bash
-cd backend
-python main.py
+python backend/main.py
 ```
 
-**Start the Streamlit Frontend:**
+**Start Frontend:**
 ```bash
-cd frontend
-streamlit run app.py
+streamlit run frontend/app.py
 ```
 
-## 🛠️ Perfection Highlights
-- **Gemini 2.0 Flash**: Ultra-fast responses with deep spiritual insight.
-- **RAG (Search Engine)**: Uses ChromaDB to ensure the AI answers based on the real Garud Puran text, not just guesses.
-- **PostgreSQL**: Stores every interaction for history and analytics via pgAdmin 4.
-- **Premium UI**: Dark-themed, modern Streamlit interface.
+---
+
+## 🛡️ Sanity & Security Check
+- **Secrets Protocol**: `.env` and `env/` folders are strictly excluded via `.gitignore`.
+- **Data Privacy**: Local ChromaDB vector stores and user data CSVs are excluded from version control.
+- **Code Integrity**: Using the latest `google-genai` SDK for future-proof performance.
+
+---
+
+## 🙏 Credits & Appreciation
+Built with a passion for AI and Spiritual Awakening.
+**"As you sow, so shall you reap."**
