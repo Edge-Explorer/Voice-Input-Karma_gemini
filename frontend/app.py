@@ -2,7 +2,9 @@ import streamlit as st
 import requests
 import json
 import os
+import speech_recognition as sr
 from dotenv import load_dotenv
+from io import BytesIO
 
 load_dotenv()
 
@@ -34,21 +36,19 @@ st.markdown("""
         border: none;
         padding: 0.5rem;
     }
-    .stButton > button:hover {
-        background: linear-gradient(45deg, #0072ff, #00c6ff);
-        color: white;
-    }
     .response-box {
         background-color: #1e1e26;
         padding: 20px;
         border-radius: 15px;
         border-left: 5px solid #0072ff;
         margin-top: 20px;
+        font-size: 1.1rem;
+        line-height: 1.6;
     }
-    .footer {
-        text-align: center;
-        margin-top: 50px;
-        color: #888;
+    .voice-btn-container {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -56,43 +56,52 @@ st.markdown("""
 # App Header
 st.title("🕉️ Karma AI")
 st.subheader("Spiritual Guidance from the Garud Puran")
-st.write("Ask about your deeds, karma, and the cycle of life and death.")
 
-# Sidebar for history or settings
-with st.sidebar:
-    st.header("Settings")
-    st.info("Using Gemini 2.0 Flash for ultra-fast, wise responses.")
-    if st.button("Clear History"):
-        st.session_state.history = []
+# Initialize session state for text input if not exists
+if 'voice_text' not in st.session_state:
+    st.session_state.voice_text = ""
 
-# Question Input
-question = st.text_input("Enter your question:", placeholder="e.g., What happens to those who help the poor?")
+# Voice Input Section
+col1, col2 = st.columns([4, 1])
 
+with col2:
+    if st.button("🎤 Ask"):
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            st.toast("Listening... Speak now!")
+            try:
+                audio = r.listen(source, timeout=5)
+                text = r.recognize_google(audio)
+                st.session_state.voice_text = text
+            except Exception as e:
+                st.error("Could not understand audio.")
+
+with col1:
+    question = st.text_input("Enter your question:", value=st.session_state.voice_text, placeholder="Ask about karma, swarg, or nark...")
+
+# Submit Button
 if st.button("Consult the Sage"):
     if question:
-        with st.spinner("Seeking wisdom from the scriptures..."):
+        with st.spinner("Seeking wisdom..."):
             try:
-                # Call our FastAPI backend
-                response = requests.post(
-                    "http://localhost:8000/api/ask",
-                    json={"question": question}
-                )
-                
+                response = requests.post("http://localhost:8000/api/ask", json={"question": question})
                 if response.status_code == 200:
-                    data = response.json()
-                    answer = data.get("answer", "No answer received.")
-                    
+                    answer = response.json().get("answer", "")
                     st.markdown(f'<div class="response-box">{answer}</div>', unsafe_allow_html=True)
                     
-                    # Voice Output (Optional Feature)
-                    if st.checkbox("Read out loud"):
-                        st.info("Voice synthesis enabled.")
+                    # Voice Output (Read Aloud)
+                    st.write("---")
+                    if st.button("🔊 Read Aloud"):
+                        import pyttsx3
+                        engine = pyttsx3.init()
+                        engine.say(answer)
+                        engine.runAndWait()
                 else:
-                    st.error("Failed to connect to the backend server.")
+                    st.error("Backend connection failed.")
             except Exception as e:
                 st.error(f"Error: {e}")
     else:
-        st.warning("Please enter a question first.")
+        st.warning("Please enter a question or use the microphone.")
 
 # Footer
 st.markdown('<div class="footer">Made with 🙏 for Spiritual Awakening</div>', unsafe_allow_html=True)
