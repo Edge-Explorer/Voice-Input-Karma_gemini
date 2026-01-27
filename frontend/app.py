@@ -5,6 +5,7 @@ import os
 import speech_recognition as sr
 from dotenv import load_dotenv
 from io import BytesIO
+from gtts import gTTS
 
 load_dotenv()
 
@@ -38,28 +39,33 @@ st.markdown("""
     }
     .response-box {
         background-color: #1e1e26;
-        padding: 20px;
+        padding: 25px;
         border-radius: 15px;
         border-left: 5px solid #0072ff;
         margin-top: 20px;
         font-size: 1.1rem;
-        line-height: 1.6;
+        line-height: 1.8;
+        color: #e0e0e0;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
-    .voice-btn-container {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
+    .footer {
+        text-align: center;
+        margin-top: 50px;
+        color: #888;
+        font-size: 0.8rem;
     }
 </style>
 """, unsafe_allow_html=True)
 
+# Initialize session state
+if 'answer' not in st.session_state:
+    st.session_state.answer = ""
+if 'voice_text' not in st.session_state:
+    st.session_state.voice_text = ""
+
 # App Header
 st.title("🕉️ Karma AI")
 st.subheader("Spiritual Guidance from the Garud Puran")
-
-# Initialize session state for text input if not exists
-if 'voice_text' not in st.session_state:
-    st.session_state.voice_text = ""
 
 # Voice Input Section
 col1, col2 = st.columns([4, 1])
@@ -70,6 +76,8 @@ with col2:
         with sr.Microphone() as source:
             st.toast("Listening... Speak now!")
             try:
+                # Adjust for ambient noise
+                r.adjust_for_ambient_noise(source, duration=0.5)
                 audio = r.listen(source, timeout=5)
                 text = r.recognize_google(audio)
                 st.session_state.voice_text = text
@@ -82,26 +90,35 @@ with col1:
 # Submit Button
 if st.button("Consult the Sage"):
     if question:
-        with st.spinner("Seeking wisdom..."):
+        with st.spinner("Seeking wisdom from the ancient scriptures..."):
             try:
                 response = requests.post("http://localhost:8000/api/ask", json={"question": question})
                 if response.status_code == 200:
-                    answer = response.json().get("answer", "")
-                    st.markdown(f'<div class="response-box">{answer}</div>', unsafe_allow_html=True)
-                    
-                    # Voice Output (Read Aloud)
-                    st.write("---")
-                    if st.button("🔊 Read Aloud"):
-                        import pyttsx3
-                        engine = pyttsx3.init()
-                        engine.say(answer)
-                        engine.runAndWait()
+                    st.session_state.answer = response.json().get("answer", "")
                 else:
-                    st.error("Backend connection failed.")
+                    st.error("The sage is currently deep in meditation (Backend unreachable).")
             except Exception as e:
                 st.error(f"Error: {e}")
     else:
-        st.warning("Please enter a question or use the microphone.")
+        st.warning("Please enter a question or speak into the microphone.")
+
+# Display Answer and Voice Output
+if st.session_state.answer:
+    st.markdown(f'<div class="response-box">{st.session_state.answer}</div>', unsafe_allow_html=True)
+    
+    st.write("---")
+    colA, colB = st.columns([1, 2])
+    
+    with colA:
+        if st.button("🔊 Read Aloud"):
+            with st.spinner("Preparing audio..."):
+                try:
+                    tts = gTTS(text=st.session_state.answer, lang='en')
+                    fp = BytesIO()
+                    tts.write_to_fp(fp)
+                    st.audio(fp)
+                except Exception as e:
+                    st.error("Audio generation failed.")
 
 # Footer
-st.markdown('<div class="footer">Made with 🙏 for Spiritual Awakening</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Made with 🙏 for Spiritual Awakening | Powered by Gemini 2.0 Flash</div>', unsafe_allow_html=True)
