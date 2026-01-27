@@ -5,7 +5,7 @@ pydantic
 requests
 
 # --- AI & Vector DB ---
-google-generativeai
+google-genai
 chromadb
 pandas
 

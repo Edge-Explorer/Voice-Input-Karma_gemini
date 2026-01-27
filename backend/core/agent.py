@@ -1,4 +1,4 @@
-import google.generativeai as genai
+from google import genai
 import chromadb
 import os
 from dotenv import load_dotenv
@@ -9,8 +9,9 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 class KarmaAgent:
     def __init__(self):
-        genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-        self.model = genai.GenerativeModel("gemini-2.0-flash")
+        # Initialize the new Google GenAI Client
+        self.client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+        self.model_id = "gemini-2.0-flash"
         
         # Initialize ChromaDB with absolute path
         chroma_path = os.path.join(BASE_DIR, "data", "chroma_db")
@@ -38,5 +39,8 @@ class KarmaAgent:
         Provide a wise and spiritually accurate response.
         """
         
-        response = self.model.generate_content(prompt)
+        response = self.client.models.generate_content(
+            model=self.model_id,
+            contents=prompt
+        )
         return response.text, context
