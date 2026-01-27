@@ -1,13 +1,25 @@
+# --- Backend & API ---
 fastapi
 uvicorn
+pydantic
+requests
+
+# --- AI & Vector DB ---
+google-generativeai
+chromadb
+pandas
+
+# --- Database (PostgreSQL) ---
 sqlalchemy
 psycopg2-binary
 alembic
-google-generativeai
-chromadb
-python-dotenv
+
+# --- Frontend ---
 streamlit
-pandas
-speechrecognition
+
+# --- Utilities ---
+python-dotenv
+
+# --- Voice Input/Output ---
+SpeechRecognition
 pyttsx3
-pydantic
