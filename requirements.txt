@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+alembic
+google-generativeai
+chromadb
+python-dotenv
+streamlit
+pandas
+speechrecognition
+pyttsx3
+pydantic

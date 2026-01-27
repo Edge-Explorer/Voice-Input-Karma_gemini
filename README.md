@@ -1,47 +1,62 @@
-# Voice Input Karma\_gemini 📜🗣️
+# 🕉️ Karma AI: The Perfected Garud Puran Guide
 
-**Voice Input Karma\_gemini** is an interactive AI tool that allows users to ask questions related to the ancient Indian scripture, Garud Puran, using voice input. Built with React Native and Flask, it leverages Google Gemini for natural language processing and Tesseract OCR for extracting text from images.
+This project is a high-performance, spiritually-focused AI application using **Gemini 2.0 Flash**, **PostgreSQL**, and **Streamlit**.
 
----
+## 📁 Project Structure
 
-## ⚙️ Features
+```text
+Voice-Input-Karma_gemini/
+├── backend/                # FastAPI Logic & AI Core
+│   ├── main.py             # Entry point (API)
+│   ├── core/
+│   │   ├── agent.py        # Gemini 2.0 Agent Logic
+│   │   └── ingest.py       # ChromaDB Ingestion Service
+│   ├── models/
+│   │   └── interaction.py  # SQLAlchemy PostgreSQL Models
+│   ├── alembic/            # Database Migrations
+│   └── legacy/             # Original files from initial setup
+├── frontend/
+│   └── app.py              # Streamlit Premium Interface
+├── data/
+│   ├── chroma_db/          # Vector Storage (Search Engine)
+│   └── Content_Storage_df.csv # Your Garud Puran Dataset
+└── .env                    # System Configuration
+```
 
-* 🗣️ **Voice Input**: Ask questions naturally using your voice.
-* 📖 **Garud Puran Knowledge Base**: Access information from the ancient scripture.
-* 🧠 **Google Gemini Integration**: Utilize advanced AI for understanding and generating responses.
-* 🖼️ **OCR Support**: Extract text from images using Tesseract OCR.
-* 📱 **Mobile-Friendly**: Built with React Native for cross-platform support.([Microsoft Edge Addons][1], [GitHub][2])
+## 🚀 Setup Instructions
 
----
+### 1. Environment
+Ensure your `.env` is configured with your **Gemini API Key** and **PostgreSQL Credentials**.
 
-## 🧠 Tech Stack
+### 2. Database Migration (Alembic)
+To set up your PostgreSQL tables:
+```bash
+cd backend
+alembic upgrade head
+```
 
-* **Frontend**: React Native
-* **Backend**: Flask
-* **AI Model**: Google Gemini
-* **OCR**: Tesseract([YouTube][3], [Chrome Web Store][4])
+### 3. Knowledge Ingestion (ChromaDB)
+To load your CSV data into the AI's search engine:
+```bash
+cd backend
+python core/ingest.py
+```
 
----
+### 4. Running the App
+**Start the Backend:**
+```bash
+cd backend
+python main.py
+```
 
-## 📁 Modules
+**Start the Streamlit Frontend:**
+```bash
+cd frontend
+streamlit run app.py
+```
 
-* `App.tsx`: Main React Native application entry point.
-* `server.py`: Flask backend server script.
-* `voice.py`: Handles voice input processing.
-* `final.py`: Final processing and response generation.
-* `Content_Storage_df.csv`: Sample data for testing.
-* `Untitled.ipynb`: Jupyter notebook for experimentation.([TechRadar][5])
-
----
-
-## 🧪 Input
-
-* **Voice Queries**: Natural language questions related to the Garud Puran.
-* **Images**: Images containing text for OCR processing.
-
----
-
-## 🚀 Goal
-
-To provide an accessible and interactive platform for users to explore and understand the teachings of the Garud Puran through voice-enabled AI interactions.
-
+## 🛠️ Perfection Highlights
+- **Gemini 2.0 Flash**: Ultra-fast responses with deep spiritual insight.
+- **RAG (Search Engine)**: Uses ChromaDB to ensure the AI answers based on the real Garud Puran text, not just guesses.
+- **PostgreSQL**: Stores every interaction for history and analytics via pgAdmin 4.
+- **Premium UI**: Dark-themed, modern Streamlit interface.
