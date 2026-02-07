@@ -83,4 +83,4 @@ streamlit run frontend/app.py
 
 ## 🙏 Credits & Appreciation
 Built with a passion for AI and Spiritual Awakening.
-**"As you sow, so shall you reap."**
+**"As you sow, so shall you reap"**
